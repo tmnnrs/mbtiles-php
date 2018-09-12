@@ -28,13 +28,19 @@ Simple PHP script which can be used to load tiled map data (PBF) directly from a
     $q->bindColumn(3, $tile_row);
     $q->bindColumn(4, $tile_data, PDO::PARAM_LOB);
 
-    while($q->fetch()) {
+    if ($data = $q->fetch()) {
+      do {
+        header('Access-Control-Allow-Origin: *');
+        header('Content-Type: application/octet-stream');
+        header('Content-Encoding: gzip');
+        echo $tile_data;
+      } while ($data = $q->fetch());
+    }
+    else {
       header('Access-Control-Allow-Origin: *');
-      //header('Content-type: application/x-protobuf');
-      header('Content-type: application/octet-stream');
-      header('Content-Encoding: gzip');
-
-      echo $tile_data;
+      header('HTTP/1.1 204 No Content');
+      header('Content-Type: application/json; charset=utf-8');
+      echo '{ "message": "Tile does not exist" }';
     }
   }
   catch(PDOException $e) {
