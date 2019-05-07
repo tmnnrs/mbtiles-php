@@ -49,3 +49,15 @@ Simple PHP script which can be used to load tiled map data (PBF) directly from a
 
 ?>
 ```
+
+The script can be used to add tile sources to a Mapbox style document as follows:
+
+```javascript
+"sources": {
+  "localhost-streets": {
+    "type": "vector",
+    "tiles": [ "http://localhost:8080/vector-tiles/mbtiles.php?z={z}&x={x}&y={y}" ],
+    "maxzoom": 14
+  }
+}
+```
